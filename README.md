@@ -2,6 +2,8 @@
 
 Or **T**urbo **V**ison **D**isplay **M**anager.
 
+Based on https://github.com/gsingh93/display-manager.
+
 Some TurboVision configurations:
 
 * `TV_BUILD_USING_GPM` (default is `ON`): Add mouse support on Linux (and more *NIXes)

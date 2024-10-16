@@ -1,8 +1,12 @@
-#include "main.h"
 #include <time.h>
 #include <linux/reboot.h>
 #include <sys/syscall.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string>
+
+#include "main.h"
+#include "destination.h"
 
 void TClockView::draw()
 {
@@ -16,18 +20,13 @@ void TClockView::draw()
 
 void TClockView::update()
 {
-    time_t raw_time;
-    char* currTime2;
+    time_t t = time(0);
+    char *date = ctime(&t);
 
-    time(&raw_time);
-    struct tm* time_info = localtime(&raw_time);
+    date[19] = '\0';
+    strcpy(currTime, &date[11]);        /* Extract time. */
 
-    // %T = %H:%M:%S
-    strftime(currTime2, sizeof(currTime2) / sizeof(char*), "%T", time_info);
-
-    strcpy(currTime, currTime2);
-
-    if (strcmp(lastTime, currTime))
+    if( strcmp(lastTime, currTime) )
     {
         drawView();
         strcpy(lastTime, currTime);
@@ -53,12 +52,14 @@ Application::Application()
 TMenuBar* Application::initMenuBar(TRect r)
 {
     r.b.y = r.a.y + 1;
-    TSubMenu& mainMenu = \
-        *new TSubMenu("\xf0", 0, hcNoContext) +
-            *new TMenuItem("Restart", cmRestart, kbNoKey, hcNoContext, "") +
-            *new TMenuItem("Shutdown", cmShutdown, kbNoKey, hcNoContext, "");
 
-    return new TMenuBar(r, mainMenu);
+    TSubMenu& mainMenu = \
+        *new TSubMenu("Power", 0, hcNoContext) +
+            *new TMenuItem("Restart", cmRestart, kbNoKey, hcNoContext) +
+            *new TMenuItem("Shutdown", cmShutdown, kbNoKey, hcNoContext) +
+            *new TMenuItem("Suspend", cmSuspend, kbNoKey, hcNoContext);
+
+    return new TMenuBar(r, mainMenu + populateXSessions() + populateWaylandSessions());
 }
 
 void Application::handleEvent(TEvent& evt)
@@ -96,6 +97,12 @@ void Application::handleEvent(TEvent& evt)
             break;
     }
     clearEvent(evt);
+}
+
+void Application::idle()
+{
+    TApplication::idle();
+    clock->update();
 }
 
 int main(int argc, char** argv)

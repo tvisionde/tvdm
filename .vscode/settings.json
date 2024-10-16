@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.xpm": "c",
+        "vector": "cpp",
+        "iosfwd": "cpp",
+        "filesystem": "cpp"
+    }
+}

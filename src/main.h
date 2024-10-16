@@ -24,11 +24,15 @@ enum commands
 class TClockView: public TView
 {
 private:
-    char* lastTime = " ";
-    char* currTime = " ";
+    char lastTime[9];
+    char currTime[9];
 
 public:
-    TClockView(TRect& r): TView(r) {};
+    TClockView(TRect& r): TView(r)
+    {
+        strcpy(lastTime, "        ");
+        strcpy(currTime, "        ");
+    };
     virtual void draw();
     virtual void update();
 };
