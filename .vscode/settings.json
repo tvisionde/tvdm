@@ -3,6 +3,10 @@
         "*.xpm": "c",
         "vector": "cpp",
         "iosfwd": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "hash_map": "cpp",
+        "unordered_map": "cpp",
+        "string_view": "cpp",
+        "limits": "cpp"
     }
 }

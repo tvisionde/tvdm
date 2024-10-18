@@ -47,9 +47,8 @@ TSubMenu& populateXSessions()
             }
         }
     }
-    else {
-        messageBox("/usr/share/xsessions does not exist as a folder", mfInformation | mfOKButton);
-    }
+    else
+        result = result + *new TMenuItem("*Literally none*", 0, kbNoKey, hcNoContext);
 
     return result;
 }
@@ -95,9 +94,8 @@ TSubMenu& populateWaylandSessions()
             }
         }
     }
-    else {
-        messageBox("/usr/share/wayland-sessions does not exist as a folder", mfError | mfOKButton);
-    }
+    else
+        result = result + *new TMenuItem("*Literally none*", 0, kbNoKey, hcNoContext);
     
     return result;
 }

@@ -103,23 +103,23 @@ static int conv(int num_msg, const struct pam_message **msg,
 
     for (i = 0; i < num_msg; i++) {
         switch (msg[i]->msg_style) {
-        case PAM_PROMPT_ECHO_ON:
-            username = ((char **) appdata_ptr)[0];
-            (*resp)[i].resp = strdup(username);
-            break;
-        case PAM_PROMPT_ECHO_OFF:
-            password = ((char **) appdata_ptr)[1];
-            (*resp)[i].resp = strdup(password);
-            break;
-        
-        case PAM_ERROR_MSG:
-            fprintf(stderr, "%s\n", msg[i]->msg);
-            result = PAM_CONV_ERR;
-            break;
+            case PAM_PROMPT_ECHO_ON:
+                username = ((char **) appdata_ptr)[0];
+                (*resp)[i].resp = strdup(username);
+                break;
+            case PAM_PROMPT_ECHO_OFF:
+                password = ((char **) appdata_ptr)[1];
+                (*resp)[i].resp = strdup(password);
+                break;
+            
+            case PAM_ERROR_MSG:
+                fprintf(stderr, "%s\n", msg[i]->msg);
+                result = PAM_CONV_ERR;
+                break;
 
-        case PAM_TEXT_INFO:
-            printf("%s\n", msg[i]->msg);
-            break;
+            case PAM_TEXT_INFO:
+                printf("%s\n", msg[i]->msg);
+                break;
         }
         if (result != PAM_SUCCESS) {
             break;
@@ -132,4 +132,12 @@ static int conv(int num_msg, const struct pam_message **msg,
     }
 
     return result;
+}
+
+void error(char* name, int errorNo)
+{
+    char* buffer;
+    sprintf(buffer, "%s: %s", name, pam_strerror(pam_handle, errorNo));
+    end(errorNo);
+    messageBox(buffer, mfError | mfOKButton);
 }

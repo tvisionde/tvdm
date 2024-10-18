@@ -20,10 +20,4 @@ static pam_handle_t *pam_handle;
 bool login(const char* username, const char* password, pid_t* child_pid);
 bool logout(void);
 
-void error(char* name, int errorNo)
-{
-    char* buffer;
-    sprintf(buffer, "%s: %s", name, pam_strerror(pam_handle, errorNo));
-    end(errorNo);
-    messageBox(buffer, mfError | mfOKButton);
-}
+void error(char* name, int errorNo);
